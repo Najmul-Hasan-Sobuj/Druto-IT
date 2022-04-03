@@ -50,6 +50,7 @@
     <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <!-- DataTables  & Plugins -->
     @yield('js')
+    <script src="{{asset('assets/custom.js')}}"></script>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
