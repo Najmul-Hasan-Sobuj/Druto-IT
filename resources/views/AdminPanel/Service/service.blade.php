@@ -40,7 +40,7 @@ Service
             <div class="card-header">
                 <h3 class="card-title">DataTable with default features</h3>
                 <button type="button" class="btn btn-success float-right" data-toggle="modal"
-                    data-target="#modal-lg">Add</button>
+                    data-target="#addServiceModal">Add</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -64,8 +64,8 @@ Service
 
 
 
-        {{-- modal start --}}
-        <div class="modal fade" id="modal-lg">
+        {{-- store modal start --}}
+        <div class="modal fade" id="addServiceModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -131,7 +131,75 @@ Service
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
+        <!-- store modal end -->
+        {{-- edit modal start --}}
+        <div class="modal fade" id="editServiceModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Service</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editServiceModal" enctype="multipart/form-data" method="post">
+                            @csrf
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror"
+                                        value="" name="title" placeholder="Enter Title 1">
+                                </div>
+                                @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <textarea id="dsc" rows="4" cols="6"
+                                        class="form-control @error('description') is-invalid @enderror"
+                                        name="description" placeholder="Home Description"></textarea>
+                                </div>
+                                @error('description')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">File input</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input id="img" type="file" name="image" class="custom-file-input"
+                                            class="@error('image') is-invalid @enderror" onchange="previewFile(this);"
+                                            id="exampleInputFile">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                        <span class="text-danger" id="image-input-error"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            @error('image')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                            <img src="" alt="" class="p-2" id="previewImg" height="200px" width="200px">
+                            <hr>
+                            <div class="col-2">
+                                <input type="submit" class="form-control btn btn-primary add_service" name="btn"
+                                    id="btn" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                    {{-- <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div> --}}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- edit modal end -->
     </section>
 </div>
 @endsection
@@ -160,7 +228,6 @@ Service
 
     $(document).ready(function () {
         // insert service data start
-
         $('#addServiceForm').submit(function (e) {
             e.preventDefault();
             let formData = new FormData(this);
@@ -209,9 +276,7 @@ Service
                             </div>
                         </td>
                         <td class="text-center">
-                            <a href="#" class="btn btn-app-sm bg-primary">
-                                <i class="fas fa-edit"></i>
-                            </a>
+                                <button class="btn btn-app-sm bg-primary edit_btn" value="${value.id}"> <i class="fas fa-edit"></i></button>
                                 <button class="btn btn-app-sm bg-danger delete_btn" value="${value.id}"> <i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
@@ -223,6 +288,33 @@ Service
             });
         }
         // view service data end
+
+        // edit service data start
+
+        $(document).on('click', '.edit_btn', function (e) {
+            e.preventDefault();
+
+            let icon_id = $(this).val();
+            $('#editServiceModal').modal('show');
+
+            $.ajax({
+                type: "GET",
+                url: "service/" + icon_id + "/edit",
+                success: function (response) {
+
+                    if (response.status == 404) {
+                        swal("Error", "", "danger");
+                        $('#editServiceModal').modal('hide');
+                    } else {
+                        $('#title').val(response.service.title);
+                        $('#dsc').val(response.service.description);
+                        $('#img').val(response.service.image);
+                    }
+
+                }
+            });
+        });
+        // edit service data end
 
         // delete service data start
         $(document).on('click', '.delete_btn', function (e) {

@@ -89,8 +89,21 @@ class ServiceSectionController extends Controller
      */
     public function edit($id)
     {
-        $data['service'] = Service::find($id);
-        return view('AdminPanel.Service.service', $data);
+        // $data['service'] = Service::find($id);
+        // return view('AdminPanel.Service.service', $data);
+
+        $service = Service::find($id);
+        if ($service) {
+            return response()->json([
+                'status' => 200,
+                'service' => $service
+            ]);
+        }else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Service not found'
+            ]);
+        }
     }
 
     /**
