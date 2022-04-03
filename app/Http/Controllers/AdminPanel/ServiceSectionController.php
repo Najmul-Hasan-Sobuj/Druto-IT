@@ -124,7 +124,9 @@ class ServiceSectionController extends Controller
                 'title'       => $request->title,
                 'description' => $request->description,
             ]);
-            return redirect()->back();
+            return response()->json([
+                'status' => 200,
+            ]);
         } else {
             return redirect()->back()->withErrors($validation);
         }

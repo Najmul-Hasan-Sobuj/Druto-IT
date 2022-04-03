@@ -143,12 +143,13 @@ Service
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="editServiceModal" enctype="multipart/form-data" method="post">
+                        <form id="updateServiceForm" enctype="multipart/form-data" method="post">
                             @csrf
                             <div class="form-row">
                                 <div class="col-12">
-                                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror"
-                                        value="" name="title" placeholder="Enter Title 1">
+                                    <input id="title" type="text"
+                                        class="form-control @error('title') is-invalid @enderror" value="" name="title"
+                                        placeholder="Enter Title 1">
                                 </div>
                                 @error('title')
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -308,13 +309,38 @@ Service
                     } else {
                         $('#title').val(response.service.title);
                         $('#dsc').val(response.service.description);
-                        $('#img').val(response.service.image);
+                        // $('#img').val(response.service.image);
                     }
 
                 }
             });
         });
         // edit service data end
+
+        // update service data start
+        $(document).on('submit', '#updateServiceForm', function (e) {
+            e.preventDefault();
+
+            let icon_id = $(this).val();
+            let formData = new FormData($('#updateServiceForm')[0]);
+            $.ajax({
+                type: "POST",
+                url: "service/" + icon_id ,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        $('#updateServiceForm').find('input').val('');
+                        $('#updateServiceForm').modal('hide');
+                        fetchService();
+                        swal("Successfully", "Data Updated!", "success");
+                    }
+                }
+            });
+        });
+        // update service data end
 
         // delete service data start
         $(document).on('click', '.delete_btn', function (e) {

@@ -87,8 +87,6 @@
                 "responsive": true,
             });
         });
-    }
-
     </script>
 </body>
 
