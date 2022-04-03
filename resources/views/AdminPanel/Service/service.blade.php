@@ -143,8 +143,95 @@ Service
                         </button>
                     </div>
                     <div class="modal-body">
+                        <form id="editServiceModal" enctype="multipart/form-data" method="post">
+                            @csrf
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <input id="id" type="hidden"
+                                        class="form-control @error('id') is-invalid @enderror" value="" name="id"
+                                        placeholder="Enter id 1">
+                                </div>
+                                @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <input id="title" type="text"
+                                        class="form-control @error('title') is-invalid @enderror" value="" name="title"
+                                        placeholder="Enter Title 1">
+                                </div>
+                                @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <textarea id="dsc" rows="4" cols="6"
+                                        class="form-control @error('description') is-invalid @enderror"
+                                        name="description" placeholder="Home Description"></textarea>
+                                </div>
+                                @error('description')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">File input</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input id="img" type="file" name="image" class="custom-file-input"
+                                            class="@error('image') is-invalid @enderror" onchange="previewFile(this);"
+                                            id="exampleInputFile">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                        <span class="text-danger" id="image-input-error"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            @error('image')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                            <img src="" alt="" class="p-2" id="previewImg" height="200px" width="200px">
+                            <hr>
+                            <div class="col-2">
+                                <input type="submit" class="form-control btn btn-primary add_service" name="btn"
+                                    id="btn" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                    {{-- <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div> --}}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- edit modal end -->
+        {{-- update modal start --}}
+        <div class="modal fade" id="updateServiceModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Service</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
                         <form id="updateServiceForm" enctype="multipart/form-data" method="post">
                             @csrf
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <input id="service_id" type="text"
+                                        class="form-control @error('service_id') is-invalservice_id @enderror" value="" name="service_id"
+                                        placeholder="Enter service_id 1">
+                                </div>
+                                @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <div class="form-row">
                                 <div class="col-12">
                                     <input id="title" type="text"
@@ -200,7 +287,7 @@ Service
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- edit modal end -->
+        <!-- update modal end -->
     </section>
 </div>
 @endsection
@@ -307,6 +394,7 @@ Service
                         swal("Error", "", "danger");
                         $('#editServiceModal').modal('hide');
                     } else {
+                        $('#id').val(response.service.id);
                         $('#title').val(response.service.title);
                         $('#dsc').val(response.service.description);
                         // $('#img').val(response.service.image);
@@ -321,57 +409,57 @@ Service
         $(document).on('submit', '#updateServiceForm', function (e) {
             e.preventDefault();
 
-            let icon_id = $(this).val();
-            let formData = new FormData($('#updateServiceForm')[0]);
+            let service_id = $('#service_id').val();
+            let editFormData = new FormData($('#updateServiceForm')[0]);
             $.ajax({
                 type: "POST",
-                url: "service/" + icon_id ,
-                data: formData,
+                url: "service/" + service_id ,
+                data: editFormData,
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log(response);
-                    if (response.status == 200) {
-                        $('#updateServiceForm').find('input').val('');
-                        $('#updateServiceForm').modal('hide');
+                    // console.log(response);
+                    // if (response.status == 200) {
+                    //     $('#updateServiceForm').find('input').val('');
+                    //     $('#updateServiceForm').modal('hide');
                         fetchService();
                         swal("Successfully", "Data Updated!", "success");
-                    }
+                    // }
                 }
             });
         });
         // update service data end
 
         // delete service data start
-        // $(document).on('click', '.delete_btn', function (e) {
-        //     e.preventDefault();
+        $(document).on('click', '.delete_btn', function (e) {
+            e.preventDefault();
 
-        //     let icon_id = $(this).val();
-        //     swal({
-        //             title: "Are you sure?",
-        //             text: "Once deleted, you will not be able to recover this data!",
-        //             icon: "warning",
-        //             buttons: true,
-        //             dangerMode: true,
-        //         })
-        //         .then((willDelete) => {
-        //             if (willDelete) {
-        //                 $.ajax({
-        //                     type: "DELETE",
-        //                     url: "service/" + icon_id,
-        //                     success: function (response) {
-        //                         fetchService();
-        //                         swal("Poof! Your imaginary file has been deleted!", {
-        //                             icon: "success",
-        //                         });
-        //                     }
-        //                 })
+            let icon_id = $(this).val();
+            swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this data!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "service/" + icon_id,
+                            success: function (response) {
+                                fetchService();
+                                swal("Poof! Your imaginary file has been deleted!", {
+                                    icon: "success",
+                                });
+                            }
+                        })
 
-        //             } else {
-        //                 swal("Your data is safe!");
-        //             }
-        //         });
-        // });
+                    } else {
+                        swal("Your data is safe!");
+                    }
+                });
+        });
 
 
         // delete service data end
