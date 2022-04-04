@@ -1,7 +1,7 @@
 @extends('AdminPanel.Master')
 
 @section('title')
-Service
+Our Work
 @endsection
 
 @section('content')
@@ -13,7 +13,7 @@ Service
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><strong>Service</strong></h1>
+                    <h1><strong>Our Work</strong></h1>
                 </div>
 
                 @if(Session::get('message'))
@@ -48,9 +48,7 @@ Service
                     <thead>
                         <tr>
                             <th>SL</th>
-                            <th>Title</th>
                             <th>Image</th>
-                            <th>Description</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -69,36 +67,14 @@ Service
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Service</h4>
+                        <h4 class="modal-title">Add Work</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="addServiceForm" enctype="multipart/form-data" method="post">
+                        <form id="addWorkForm" enctype="multipart/form-data" method="post">
                             @csrf
-                            <div class="form-row">
-                                <div class="col-12">
-                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                        value="" name="title" placeholder="Enter Title 1">
-                                </div>
-                                @error('title')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <hr>
-                            <div class="form-row">
-                                <div class="col-12">
-                                    <textarea id="description" rows="4" cols="6"
-                                        class="form-control @error('description') is-invalid @enderror"
-                                        name="description" placeholder="Home Description"></textarea>
-                                </div>
-                                @error('description')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <hr>
-
                             <div class="form-group">
                                 <label for="exampleInputFile">File input</label>
                                 <div class="input-group">
@@ -137,44 +113,24 @@ Service
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Service</h4>
+                        <h4 class="modal-title">Add Work</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="editServiceModal" enctype="multipart/form-data" method="post">
+                        <form id="editWorkModal" enctype="multipart/form-data" method="post">
                             @csrf
                             <div class="form-row">
                                 <div class="col-12 mb-3">
-                                    <input id="id" type="hidden" class="form-control @error('id') is-invalid @enderror"
-                                        value="" name="id" placeholder="Enter id 1">
+                                    <input id="id" type="hidden"
+                                        class="form-control @error('id') is-invalid @enderror" value="" name="id"
+                                        placeholder="Enter id 1">
                                 </div>
                                 @error('title')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <input id="title" type="text"
-                                        class="form-control @error('title') is-invalid @enderror" value="" name="title"
-                                        placeholder="Enter Title 1">
-                                </div>
-                                @error('title')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <textarea id="dsc" rows="4" cols="6"
-                                        class="form-control @error('description') is-invalid @enderror"
-                                        name="description" placeholder="Home Description"></textarea>
-                                </div>
-                                @error('description')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
                             <div class="form-group">
                                 <label for="exampleInputFile">File input</label>
                                 <div class="input-group">
@@ -209,7 +165,7 @@ Service
         </div>
         <!-- edit modal end -->
         {{-- update modal start --}}
-        <div class="modal fade" id="updateServiceModal">
+        <div class="modal fade" id="updateWorkModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -219,36 +175,15 @@ Service
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="updateServiceForm" enctype="multipart/form-data" method="post">
+                        <form id="updateWorkForm" enctype="multipart/form-data" method="post">
                             @csrf
                             <div class="form-row">
                                 <div class="col-12 mb-3">
-                                    <input id="service_id" type="text"
-                                        class="form-control @error('service_id') is-invalservice_id @enderror" value=""
-                                        name="service_id" placeholder="Enter service_id 1">
+                                    <input id="work_id" type="text"
+                                        class="form-control @error('service_id') is-invalservice_id @enderror" value="" name="service_id"
+                                        placeholder="Enter service_id 1">
                                 </div>
                                 @error('title')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12">
-                                    <input id="title" type="text"
-                                        class="form-control @error('title') is-invalid @enderror" value="" name="title"
-                                        placeholder="Enter Title 1">
-                                </div>
-                                @error('title')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <hr>
-                            <div class="form-row">
-                                <div class="col-12">
-                                    <textarea id="dsc" rows="4" cols="6"
-                                        class="form-control @error('description') is-invalid @enderror"
-                                        name="description" placeholder="Home Description"></textarea>
-                                </div>
-                                @error('description')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -315,22 +250,21 @@ Service
 
     $(document).ready(function () {
         // insert service data start
-        $('#addServiceForm').submit(function (e) {
+        $('#addWorkForm').submit(function (e) {
             e.preventDefault();
             let formData = new FormData(this);
             $('#image-input-error').text('');
 
             $.ajax({
                 type: 'POST',
-                url: `/service`,
+                url: `/work`,
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: (response) => {
                     if (response) {
-                        // this.reset();
-                        fetchService();
-                        alert('data has been uploaded successfully');
+                        this.reset();
+                        alert('Image has been uploaded successfully');
                     }
                 },
                 error: function (response) {
@@ -342,27 +276,19 @@ Service
         // insert service data end
 
         // view service data start
-        fetchService();
-
-        function fetchService() {
+        fetchWork();
+        function fetchWork() {
             $.ajax({
                 type: "GET",
-                url: "/fetch-service",
+                url: "/fetch-work",
                 dataType: "json",
                 success: function (response) {
-                    // console.log(response.service);
                     $('tbody').html('');
-                    $.each(response.service, function (key, value) {
+                    $.each(response.work, function (key, value) {
                         $('tbody').append(`
                     <tr>
                         <td>${++key}</td>
-                        <td>${value.title}</td>
                         <td><img src="uploads/${value.image}" alt="" class="p-2" id="previewImg" height="50px" width="50px"></td>
-                        <td>
-                            <div class="form-group">
-                                <textarea class="form-control-sm w-100" disabled rows="3">${value.description}</textarea>
-                            </div>
-                        </td>
                         <td class="text-center">
                                 <button class="btn btn-app-sm bg-primary edit_btn" value="${value.id}"> <i class="fas fa-edit"></i></button>
                                 <button class="btn btn-app-sm bg-danger delete_btn" value="${value.id}"> <i class="fas fa-trash"></i></button>
@@ -413,7 +339,7 @@ Service
             let editFormData = new FormData($('#updateServiceForm')[0]);
             $.ajax({
                 type: "POST",
-                url: "service/" + service_id,
+                url: "service/" + service_id ,
                 data: editFormData,
                 contentType: false,
                 processData: false,
@@ -421,8 +347,8 @@ Service
                     // if (response.status == 200) {
                     //     $('#updateServiceForm').find('input').val('');
                     //     $('#updateServiceForm').modal('hide');
-                    fetchService();
-                    swal("Successfully", "Data Updated!", "success");
+                        fetchService();
+                        swal("Successfully", "Data Updated!", "success");
                     // }
                 }
             });

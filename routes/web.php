@@ -38,14 +38,14 @@ Route::get('/homes', [App\Http\Controllers\HomeController::class, 'index'])->nam
 // Route::post('service', [ServiceSectionController::class, 'store'])->name('service.store');
         Route::resource('service',ServiceSectionController::class);
         Route::get('/fetch-service',[ServiceSectionController::class,'fetchService']);
+        Route::resource('work',WorkSectionController::class);
+        Route::get('/fetch-work',[WorkSectionController::class,'fetchWork']);
 
-// Route::group(['prefix'=>'admin/'],function (){
-// Route::prefix('admin')->group(function () {
+
 Route::group(['prefix' => 'admin', 'middleware'=>'auth'], function (){
         Route::get('dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
         Route::get('homes',[HomeSectionController::class,'home'])->name('admin.homes');
         Route::post('update_home',[HomeSectionController::class,'update_home'])->name('update.homes');
-        // Route::resource('service',ServiceSectionController::class);
 
         // Route::get('service', [ServiceSectionController::class, 'index'])->name('service.index');
         // Route::get('service/create', [ServiceSectionController::class, 'create'])->name('service.create');
@@ -55,7 +55,6 @@ Route::group(['prefix' => 'admin', 'middleware'=>'auth'], function (){
         // Route::delete('service/{id}', [ServiceSectionController::class, 'destroy'])->name('service.destroy');
 
 
-        Route::resource('work',WorkSectionController::class);
         Route::resource('about',AboutSectionController::class);
 });
 

@@ -16,8 +16,16 @@ class WorkSectionController extends Controller
      */
     public function index()
     {
-        $data['work'] = Work::get();
-        return view('AdminPanel.Work.list', $data);
+        
+        return view('AdminPanel.Work.work');
+    }
+
+    public function fetchWork()
+    {
+        $work = Work::get();
+        return response()->json([
+            'work' => $work,
+        ]);
     }
 
     /**
@@ -27,7 +35,7 @@ class WorkSectionController extends Controller
      */
     public function create()
     {
-        return view('AdminPanel.Work.create');
+        return view('AdminPanel.Work.work');
     }
 
     /**
