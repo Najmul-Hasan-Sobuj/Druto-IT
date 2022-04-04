@@ -263,7 +263,7 @@ Our Work
                 processData: false,
                 success: (response) => {
                     if (response) {
-                        this.reset();
+                        fetchWork();
                         alert('Image has been uploaded successfully');
                     }
                 },
