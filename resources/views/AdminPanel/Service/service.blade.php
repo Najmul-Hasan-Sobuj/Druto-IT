@@ -78,7 +78,7 @@ Service
                         <form id="addServiceForm" enctype="multipart/form-data" method="post">
                             @csrf
                             <div class="form-row">
-                                <div class="col-12">
+                                <div class="col-12 mb-3">
                                     <input type="text" class="form-control @error('title') is-invalid @enderror"
                                         value="" name="title" placeholder="Enter Title 1">
                                 </div>
@@ -86,9 +86,8 @@ Service
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <hr>
                             <div class="form-row">
-                                <div class="col-12">
+                                <div class="col-12 mb-3">
                                     <textarea id="description" rows="4" cols="6"
                                         class="form-control @error('description') is-invalid @enderror"
                                         name="description" placeholder="Home Description"></textarea>
@@ -97,7 +96,6 @@ Service
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <hr>
 
                             <div class="form-group">
                                 <label for="exampleInputFile">File input</label>

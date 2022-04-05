@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Intervention\Image\Facades\Image;
 use App\Http\Controllers\AdminPanel\AdminController;
 use App\Http\Controllers\AdminPanel\HomeSectionController;
+use App\Http\Controllers\AdminPanel\teamSectionController;
 use App\Http\Controllers\AdminPanel\WorkSectionController;
 use App\Http\Controllers\AdminPanel\AboutSectionController;
 use App\Http\Controllers\AdminPanel\ServiceSectionController;
@@ -40,6 +41,8 @@ Route::get('/homes', [App\Http\Controllers\HomeController::class, 'index'])->nam
         Route::get('/fetch-service',[ServiceSectionController::class,'fetchService']);
         Route::resource('work',WorkSectionController::class);
         Route::get('/fetch-work',[WorkSectionController::class,'fetchWork']);
+        Route::resource('team',teamSectionController::class);
+        Route::get('/fetch-team',[teamSectionController::class,'fetchTeam']);
 
 
 Route::group(['prefix' => 'admin', 'middleware'=>'auth'], function (){

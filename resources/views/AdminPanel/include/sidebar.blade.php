@@ -102,6 +102,12 @@
                         <p>Our Work</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('team.index')}}" class="nav-link">
+                        <i class="nav-icon far fa-circle text-success"></i>
+                        <p>Team Members</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

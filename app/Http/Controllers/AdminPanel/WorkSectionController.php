@@ -47,6 +47,9 @@ class WorkSectionController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
+            'title'       => 'required',
+            'description' => 'required',
+            'link'        => 'required',
             'image'       => 'required|image|mimes:png,jpg'
         ]);
         if ($validation->passes()) {
@@ -56,6 +59,9 @@ class WorkSectionController extends Controller
                 $request->image->move(public_path('uploads'), $imgName);
             }
             Work::create([
+                'title'       => $request->title,
+                'description' => $request->description,
+                'link'        => $request->link,
                 'image'       => $imgName,
             ]);
             return redirect()->back();
@@ -120,10 +126,6 @@ class WorkSectionController extends Controller
     public function destroy($id)
     {
         $delete = Work::find($id)->delete();
-        if ($delete) {
-            return redirect()->back();
-        }else {
-            echo "unsuccessful";
-        }
+        
     }
 }
