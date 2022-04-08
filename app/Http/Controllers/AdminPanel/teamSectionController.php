@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\AdminPanel;
 
-use App\Http\Controllers\Controller;
+use App\Models\Team;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
-class teamSectionController extends Controller
+class TeamSectionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,15 @@ class teamSectionController extends Controller
      */
     public function index()
     {
-        //
+        return view('AdminPanel.Team.team');
+    }
+
+    public function fetchTeam()
+    {
+        $team = Team::get();
+        return response()->json([
+            'team' => $team,
+        ]);
     }
 
     /**
@@ -24,7 +34,7 @@ class teamSectionController extends Controller
      */
     public function create()
     {
-        //
+        return view('AdminPanel.Team.team');
     }
 
     /**
@@ -35,7 +45,36 @@ class teamSectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validation = Validator::make($request->all(), [
+            'name'        => 'required',
+            'skills'      => 'required',
+            'designation' => 'required',
+            'facebook'    => 'required',
+            'linkedin'    => 'required',
+            'twitter'     => 'required',
+            'github'      => 'required',
+            'image'       => 'required|image|mimes:png,jpg'
+        ]);               
+        if ($validation->passes()) {
+            $imgName = '';
+            if ($request->image) {
+                $imgName = time() . '.' . $request->image->extension();
+                $request->image->move(public_path('uploads'), $imgName);
+            }
+            Team::create([
+                'name'        => $request->name,
+                'skills'      => $request->skills,
+                'designation' => $request->designation,
+                'facebook'    => $request->facebook,
+                'linkedin'    => $request->linkedin,
+                'twitter'     => $request->twitter,
+                'github'      => $request->github,
+                'image'       => $imgName,
+            ]);
+            return redirect()->back();
+        } else {
+            return redirect()->back()->withErrors($validation);
+        }
     }
 
     /**
@@ -80,6 +119,7 @@ class teamSectionController extends Controller
      */
     public function destroy($id)
     {
-        //
+         Team::find($id)->delete();
+        
     }
 }

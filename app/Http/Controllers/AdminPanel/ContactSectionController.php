@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\AdminPanel;
 
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Work;
 use Illuminate\Support\Facades\Validator;
 
-class WorkSectionController extends Controller
+class ContactSectionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,18 +16,16 @@ class WorkSectionController extends Controller
      */
     public function index()
     {
-        
-        return view('AdminPanel.Work.work');
+        return view('AdminPanel.Contact.contact');
     }
 
-    public function fetchWork()
+    public function fetchContact()
     {
-        $work = Work::get();
+        $contact = Contact::get();
         return response()->json([
-            'work' => $work,
+            'contact' => $contact,
         ]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -35,7 +33,7 @@ class WorkSectionController extends Controller
      */
     public function create()
     {
-        return view('AdminPanel.Work.work');
+        return view('AdminPanel.Contact.contact');
     }
 
     /**
@@ -47,22 +45,15 @@ class WorkSectionController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'title'       => 'required',
+            'name'        => 'required',
+            'email'       => 'required',
             'description' => 'required',
-            'link'        => 'required',
-            'image'       => 'required|image|mimes:png,jpg'
         ]);
         if ($validation->passes()) {
-            $imgName = '';
-            if ($request->image) {
-                $imgName = time() . '.' . $request->image->extension();
-                $request->image->move(public_path('uploads'), $imgName);
-            }
-            Work::create([
-                'title'       => $request->title,
+            Contact::create([
+                'name'        => $request->name,
+                'email'       => $request->email,
                 'description' => $request->description,
-                'link'        => $request->link,
-                'image'       => $imgName,
             ]);
             return redirect()->back();
         } else {
@@ -89,8 +80,7 @@ class WorkSectionController extends Controller
      */
     public function edit($id)
     {
-        $data['work'] = Work::find($id);
-        return view('AdminPanel.Work.update', $data);
+        //
     }
 
     /**
@@ -102,19 +92,7 @@ class WorkSectionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (true) {
-            $imgName = '';
-            if ($request->image) {
-                $imgName = time() . '.' . $request->image->extension();
-                $request->image->move(public_path('uploads'), $imgName);
-            }
-            Work::find($id)->update([
-                'image'       => $imgName,
-            ]);
-            return redirect()->back();
-        } else {
-            echo "failed";
-        }
+        //
     }
 
     /**
@@ -125,7 +103,6 @@ class WorkSectionController extends Controller
      */
     public function destroy($id)
     {
-        Work::find($id)->delete();
-        
+        Contact::find($id)->delete();
     }
 }

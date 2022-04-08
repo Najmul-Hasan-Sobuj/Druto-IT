@@ -1,7 +1,7 @@
 @extends('AdminPanel.Master')
 
 @section('title')
-Team Members
+Service
 @endsection
 
 @section('content')
@@ -13,7 +13,7 @@ Team Members
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><strong>Team Members</strong></h1>
+                    <h1><strong>Service</strong></h1>
                 </div>
 
                 @if(Session::get('message'))
@@ -48,14 +48,9 @@ Team Members
                     <thead>
                         <tr>
                             <th>SL</th>
-                            <th>name</th>
-                            <th>skills</th>
-                            <th>designation</th>
-                            <th>image</th>
-                            <th>facebook</th>
-                            <th>linkedin</th>
-                            <th>twitter</th>
-                            <th>github</th>
+                            <th>Title</th>
+                            <th>Image</th>
+                            <th>Description</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -74,41 +69,34 @@ Team Members
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Work</h4>
+                        <h4 class="modal-title">Add Service</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="addTeamForm" enctype="multipart/form-data" method="post">
+                        <form id="addServiceForm" enctype="multipart/form-data" method="post">
                             @csrf
                             <div class="form-row">
                                 <div class="col-12 mb-3">
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        value="" name="name" placeholder="Enter name 1">
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
+                                        value="" name="title" placeholder="Enter Title 1">
                                 </div>
-                                @error('name')
+                                @error('title')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-row">
                                 <div class="col-12 mb-3">
-                                    <input type="text" class="form-control @error('skills') is-invalid @enderror"
-                                        value="" name="skills" placeholder="Enter skills 1">
+                                    <textarea id="description" rows="4" cols="6"
+                                        class="form-control @error('description') is-invalid @enderror"
+                                        name="description" placeholder="Home Description"></textarea>
                                 </div>
-                                @error('skills')
+                                @error('description')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <input type="text" class="form-control @error('designation') is-invalid @enderror"
-                                        value="" name="designation" placeholder="Enter designation 1">
-                                </div>
-                                @error('designation')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+
                             <div class="form-group">
                                 <label for="exampleInputFile">File input</label>
                                 <div class="input-group">
@@ -126,42 +114,6 @@ Team Members
                             @enderror
                             <img src="" alt="" class="p-2" id="previewImg" height="200px" width="200px">
                             <hr>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <input type="text" class="form-control @error('facebook') is-invalid @enderror"
-                                        value="" name="facebook" placeholder="Enter Social facebook">
-                                </div>
-                                @error('facebook')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <input type="text" class="form-control @error('linkedin') is-invalid @enderror"
-                                        value="" name="linkedin" placeholder="Enter Social linkedin">
-                                </div>
-                                @error('linkedin')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <input type="text" class="form-control @error('twitter') is-invalid @enderror"
-                                        value="" name="twitter" placeholder="Enter Social twitter">
-                                </div>
-                                @error('twitter')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 mb-3">
-                                    <input type="text" class="form-control @error('github') is-invalid @enderror"
-                                        value="" name="github" placeholder="Enter Social github">
-                                </div>
-                                @error('github')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
                             <div class="col-2">
                                 <input type="submit" class="form-control btn btn-primary add_service" name="btn"
                                     id="btn" value="Submit">
@@ -183,13 +135,13 @@ Team Members
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Work</h4>
+                        <h4 class="modal-title">Add Service</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="editWorkModal" enctype="multipart/form-data" method="post">
+                        <form id="editServiceModal" enctype="multipart/form-data" method="post">
                             @csrf
                             <div class="form-row">
                                 <div class="col-12 mb-3">
@@ -200,6 +152,27 @@ Team Members
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <input id="title" type="text"
+                                        class="form-control @error('title') is-invalid @enderror" value="" name="title"
+                                        placeholder="Enter Title 1">
+                                </div>
+                                @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <textarea id="dsc" rows="4" cols="6"
+                                        class="form-control @error('description') is-invalid @enderror"
+                                        name="description" placeholder="Home Description"></textarea>
+                                </div>
+                                @error('description')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="form-group">
                                 <label for="exampleInputFile">File input</label>
                                 <div class="input-group">
@@ -234,7 +207,7 @@ Team Members
         </div>
         <!-- edit modal end -->
         {{-- update modal start --}}
-        <div class="modal fade" id="updateWorkModal">
+        <div class="modal fade" id="updateServiceModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -244,15 +217,36 @@ Team Members
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="updateWorkForm" enctype="multipart/form-data" method="post">
+                        <form id="updateServiceForm" enctype="multipart/form-data" method="post">
                             @csrf
                             <div class="form-row">
                                 <div class="col-12 mb-3">
-                                    <input id="work_id" type="text"
+                                    <input id="service_id" type="text"
                                         class="form-control @error('service_id') is-invalservice_id @enderror" value=""
                                         name="service_id" placeholder="Enter service_id 1">
                                 </div>
                                 @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <input id="title" type="text"
+                                        class="form-control @error('title') is-invalid @enderror" value="" name="title"
+                                        placeholder="Enter Title 1">
+                                </div>
+                                @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <textarea id="dsc" rows="4" cols="6"
+                                        class="form-control @error('description') is-invalid @enderror"
+                                        name="description" placeholder="Home Description"></textarea>
+                                </div>
+                                @error('description')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -319,21 +313,22 @@ Team Members
 
     $(document).ready(function () {
         // insert service data start
-        $('#addTeamForm').submit(function (e) {
+        $('#addServiceForm').submit(function (e) {
             e.preventDefault();
             let formData = new FormData(this);
             $('#image-input-error').text('');
 
             $.ajax({
                 type: 'POST',
-                url: `/team`,
+                url: `/service`,
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: (response) => {
                     if (response) {
-                        fetchTeam();
-                        alert('Data has been uploaded successfully');
+                        // this.reset();
+                        fetchService();
+                        alert('data has been uploaded successfully');
                     }
                 },
                 error: function (response) {
@@ -345,26 +340,27 @@ Team Members
         // insert service data end
 
         // view service data start
-        fetchTeam();
-        function fetchTeam() {
+        fetchService();
+
+        function fetchService() {
             $.ajax({
                 type: "GET",
-                url: "/fetch-team",
+                url: "/fetch-service",
                 dataType: "json",
                 success: function (response) {
+                    // console.log(response.service);
                     $('tbody').html('');
-                    $.each(response.team, function (key, value) {
+                    $.each(response.service, function (key, value) {
                         $('tbody').append(`
                     <tr>
                         <td>${++key}</td>
-                        <td>${value.name}</td>
-                        <td>${value.skills}</td>
-                        <td>${value.designation}</td>
+                        <td>${value.title}</td>
                         <td><img src="uploads/${value.image}" alt="" class="p-2" id="previewImg" height="50px" width="50px"></td>
-                        <td>${value.facebook}</td>
-                        <td>${value.linkedin}</td>
-                        <td>${value.twitter}</td>
-                        <td>${value.github}</td>
+                        <td>
+                            <div class="form-group">
+                                <textarea class="form-control-sm w-100" disabled rows="3">${value.description}</textarea>
+                            </div>
+                        </td>
                         <td class="text-center">
                                 <button class="btn btn-app-sm bg-primary edit_btn" value="${value.id}"> <i class="fas fa-edit"></i></button>
                                 <button class="btn btn-app-sm bg-danger delete_btn" value="${value.id}"> <i class="fas fa-trash"></i></button>
@@ -447,9 +443,9 @@ Team Members
                     if (willDelete) {
                         $.ajax({
                             type: "DELETE",
-                            url: "team/" + icon_id,
+                            url: "service/" + icon_id,
                             success: function (response) {
-                                fetchTeam();
+                                fetchService();
                                 swal("Poof! Your imaginary file has been deleted!", {
                                     icon: "success",
                                 });
