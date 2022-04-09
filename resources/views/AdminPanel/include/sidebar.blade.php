@@ -108,6 +108,12 @@
                         <p>Team Members</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('contact.index')}}" class="nav-link">
+                        <i class="nav-icon far fa-circle text-secondary"></i>
+                        <p>Contact Us</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

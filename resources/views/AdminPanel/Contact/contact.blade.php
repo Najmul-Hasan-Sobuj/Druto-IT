@@ -1,7 +1,7 @@
 @extends('AdminPanel.Master')
 
 @section('title')
-Service
+Contact
 @endsection
 
 @section('content')
@@ -13,7 +13,7 @@ Service
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><strong>Service</strong></h1>
+                    <h1><strong>Contact</strong></h1>
                 </div>
 
                 @if(Session::get('message'))
@@ -40,7 +40,7 @@ Service
             <div class="card-header">
                 <h3 class="card-title">DataTable with default features</h3>
                 <button type="button" class="btn btn-success float-right" data-toggle="modal"
-                    data-target="#addServiceModal">Add</button>
+                    data-target="#addContactModal">Add</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -48,8 +48,8 @@ Service
                     <thead>
                         <tr>
                             <th>SL</th>
-                            <th>Title</th>
-                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Email</th>
                             <th>Description</th>
                             <th>Action</th>
                         </tr>
@@ -65,30 +65,39 @@ Service
 
 
         {{-- store modal start --}}
-        <div class="modal fade" id="addServiceModal">
+        <div class="modal fade" id="addContactModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Service</h4>
+                        <h4 class="modal-title">Add Contact</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="addServiceForm" enctype="multipart/form-data" method="post">
+                        <form id="addContactForm" enctype="multipart/form-data" method="post">
                             @csrf
                             <div class="form-row">
                                 <div class="col-12 mb-3">
-                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                        value="" name="title" placeholder="Enter Title 1">
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        value="" name="name" placeholder="Enter Your name">
                                 </div>
-                                @error('title')
+                                @error('name')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-row">
                                 <div class="col-12 mb-3">
-                                    <textarea id="description" rows="4" cols="6"
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        value="" name="email" placeholder="Enter Your email">
+                                </div>
+                                @error('email')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <textarea id="des" rows="4" cols="6"
                                         class="form-control @error('description') is-invalid @enderror"
                                         name="description" placeholder="Home Description"></textarea>
                                 </div>
@@ -96,26 +105,8 @@ Service
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-
-                            <div class="form-group">
-                                <label for="exampleInputFile">File input</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" name="image" class="custom-file-input"
-                                            class="@error('image') is-invalid @enderror" onchange="previewFile(this);"
-                                            id="exampleInputFile">
-                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                        <span class="text-danger" id="image-input-error"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            @error('image')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <img src="" alt="" class="p-2" id="previewImg" height="200px" width="200px">
-                            <hr>
                             <div class="col-2">
-                                <input type="submit" class="form-control btn btn-primary add_service" name="btn"
+                                <input type="submit" class="form-control btn btn-primary add_contact" name="btn"
                                     id="btn" value="Submit">
                             </div>
                         </form>
@@ -291,19 +282,7 @@ Service
 
 @section('js')
 <script type="text/javascript">
-    function previewFile(input) {
-        var file = $("input[type=file]").get(0).files[0];
-
-        if (file) {
-            var reader = new FileReader();
-
-            reader.onload = function () {
-                $("#previewImg").attr("src", reader.result);
-            }
-
-            reader.readAsDataURL(file);
-        }
-    }
+    
 
     $.ajaxSetup({
         headers: {
@@ -313,49 +292,44 @@ Service
 
     $(document).ready(function () {
         // insert service data start
-        $('#addServiceForm').submit(function (e) {
+        $(document).on('click','.add_contact', function (e) {
             e.preventDefault();
-            let formData = new FormData(this);
-            $('#image-input-error').text('');
 
+            let data = {
+                'name'       : $('input[name = "name"]').val(),
+                'email'      : $('input[name = "email"]').val(),
+                'description': $('#des').val(),
+            }
             $.ajax({
-                type: 'POST',
-                url: `/service`,
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: (response) => {
-                    if (response) {
-                        // this.reset();
-                        fetchService();
-                        alert('data has been uploaded successfully');
-                    }
-                },
-                error: function (response) {
+                type: "POST",
+                url: "contact",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    fetchContact();
                     console.log(response);
-                    $('#image-input-error').text(response.responseJSON.errors.file);
                 }
             });
         });
         // insert service data end
 
         // view service data start
-        fetchService();
+        fetchContact();
 
-        function fetchService() {
+        function fetchContact() {
             $.ajax({
                 type: "GET",
-                url: "/fetch-service",
+                url: "/fetch-contact",
                 dataType: "json",
                 success: function (response) {
                     // console.log(response.service);
                     $('tbody').html('');
-                    $.each(response.service, function (key, value) {
+                    $.each(response.contact, function (key, value) {
                         $('tbody').append(`
                     <tr>
                         <td>${++key}</td>
-                        <td>${value.title}</td>
-                        <td><img src="uploads/${value.image}" alt="" class="p-2" id="previewImg" height="50px" width="50px"></td>
+                        <td>${value.name}</td>
+                        <td>${value.email}</td>
                         <td>
                             <div class="form-group">
                                 <textarea class="form-control-sm w-100" disabled rows="3">${value.description}</textarea>
@@ -419,7 +393,7 @@ Service
                     // if (response.status == 200) {
                     //     $('#updateServiceForm').find('input').val('');
                     //     $('#updateServiceForm').modal('hide');
-                    fetchService();
+                    fetchContact();
                     swal("Successfully", "Data Updated!", "success");
                     // }
                 }
@@ -443,9 +417,9 @@ Service
                     if (willDelete) {
                         $.ajax({
                             type: "DELETE",
-                            url: "service/" + icon_id,
+                            url: "contact/" + icon_id,
                             success: function (response) {
-                                fetchService();
+                                fetchContact();
                                 swal("Poof! Your imaginary file has been deleted!", {
                                     icon: "success",
                                 });
