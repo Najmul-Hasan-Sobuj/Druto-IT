@@ -89,8 +89,6 @@ class ServiceSectionController extends Controller
      */
     public function edit($id)
     {
-        // $data['service'] = Service::find($id);
-        // return view('AdminPanel.Service.service', $data);
 
         $service = Service::find($id);
         if ($service) {
@@ -115,21 +113,67 @@ class ServiceSectionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validation = Validator::make($request->all(), [
+        $request->validate([
             'title'       => 'required',
             'description' => 'required',
         ]);
-        if ($validation->passes()) {
-            Service::find($id)->update([
-                'title'       => $request->title,
-                'description' => $request->description,
-            ]);
-            return response()->json([
-                'status' => 200,
-            ]);
-        } else {
-            return redirect()->back()->withErrors($validation);
+
+
+        $service = Service::find($id);
+        $service_image = $request->file('image');
+
+
+        if ($service == null){
+
+            if ($service_image){
+                $service = new Service();
+
+//                $service_image = $request->file('image');
+                $imageName = $service_image->getClientOriginalName();
+                $directory = 'assets/images/service/';
+                $imageUrl = $directory . $imageName;
+                Image::make($service_image)->resize(512, 512)->save($imageUrl);
+
+                $service->id          = $id;
+                $service->title       = $request->title;
+                $service->description = $request->description;
+                $service->image       = $imageUrl;
+                $service->save();
+            }else{
+                $service->id          = $id;
+                $service->title       = $request->title;
+                $service->description = $request->description;
+                $service->image       = $imageUrl;
+                $service->save();
+            }
+
+
+        }else{
+            if ($service_image){
+                unlink($service->image);
+//                $service_image = $request->file('image');
+                $imageName = date('mdYHis') . uniqid() . $service_image->getClientOriginalName();
+                $directory = 'assets/images/service/';
+                $imageUrl = $directory . $imageName;
+                Image::make($service_image)->resize(512, 512)->save($imageUrl);
+
+                $service->id          = $id;
+                $service->title       = $request->title;
+                $service->description = $request->description;
+                $service->image       = $imageUrl;
+                $service->save();
+
+            }else{
+                $service->id          = $id;
+                $service->title       = $request->title;
+                $service->description = $request->description;
+                $service->image       = $imageUrl;
+                $service->save();
+            }
         }
+
+        return redirect()->route('service.index')->with('message','Service Updated Successfully');
+
     }
 
     /**
@@ -140,11 +184,6 @@ class ServiceSectionController extends Controller
      */
     public function destroy($id)
     {
-        $delete = Service::find($id)->delete();
-        // if ($delete) {
-        //     return redirect()->back();
-        // }else {
-        //     echo "unsuccessful";
-        // }
+        Service::find($id)->delete();
     }
 }
