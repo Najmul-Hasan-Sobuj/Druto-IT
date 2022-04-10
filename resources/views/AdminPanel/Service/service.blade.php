@@ -301,19 +301,19 @@ Service
         $(document).on('click', '.edit_btn', function (e) {
             e.preventDefault();
 
-            let icon_id = $(this).val();
+            let ser_id = $(this).val();
             $('#editServiceModal').modal('show');
 
             $.ajax({
                 type: "GET",
-                url: "service/" + icon_id + "/edit",
+                url: "service/" +ser_id + "/edit",
                 success: function (response) {
 
                     if (response.status == 404) {
-                        swal("Error", "", "danger");
+                        swal("Error", "data not found", "danger");
                         $('#editServiceModal').modal('hide');
                     } else {
-                        $('#id').val(response.service.id);
+                        $('#id').val(ser_id);
                         $('#title').val(response.service.title);
                         $('#dsc').val(response.service.description);
                         // $('#img').val(response.service.image);

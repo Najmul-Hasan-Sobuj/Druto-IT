@@ -133,14 +133,14 @@ class ServiceSectionController extends Controller
                     $service->description = $request->description;
 
                     if ($request->hasFile('image')) {
-                        $path = 'assets/images/service/' . $service->image;
+                        $path = 'uploads/' . $service->image;
                         if (File::exists($path)) {
                             File::delete($path);
                         }
                         $service_image  = $request->file('image');
                         $extention      = $service_image->getClientOriginalName();
                         $fileName       = time() . '.' .$extention;
-                        $service_image->move('assets/images/service/', $fileName);
+                        $service_image->move('uploads/', $fileName);
                         Image:: make($service_image)->resize(512, 512)->save($fileName);
                         $service->image = $fileName;
                     }
