@@ -131,7 +131,6 @@ class ServiceSectionController extends Controller
                     $service->description = $request->description;
 
                     if ($request->hasFile('image')) {
-                        
                         $path = 'assets/images/service/' . $service->image;
                         if (File::exists($path)) {
                             File::delete($path);
@@ -152,7 +151,7 @@ class ServiceSectionController extends Controller
                 }else {
                     return response()->json([
                         'status' => 404,
-                        'message' => 'data saved successfully'
+                        'message' => 'data not saves'
                     ]);
                 }
                 

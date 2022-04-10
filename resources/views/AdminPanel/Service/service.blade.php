@@ -336,12 +336,17 @@ Service
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    if (response.status == 400) {
-                        $('#updateServiceForm').find('input').val('');
-                        $('#updateServiceForm').modal('hide');
-                    fetchService();
-                    swal("Successfully", "Data Updated!", "success");
-                    }
+                    // if (response.status == 404) {
+                    //     // $('#updateServiceForm').html('');
+                    //     $('#updateServiceForm').modal('hide');
+                    // swal("Failed", "Data not submit!", "error");
+                    // }else if(response.status == 200){
+                    //     $('#updateServiceForm').html('');
+                    //     $('#updateServiceForm').modal('hide');
+                    //     fetchService();
+                    // }
+
+                    console.log(response);
                 }
             });
         });
