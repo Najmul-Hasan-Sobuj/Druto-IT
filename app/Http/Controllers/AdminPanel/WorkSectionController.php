@@ -89,8 +89,18 @@ class WorkSectionController extends Controller
      */
     public function edit($id)
     {
-        $data['work'] = Work::find($id);
-        return view('AdminPanel.Work.update', $data);
+        $work = Work::find($id);
+        if ($work) {
+            return response()->json([
+                'status' => 200,
+                'work' => $work
+            ]);
+        }else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'work not found'
+            ]);
+        }
     }
 
     /**

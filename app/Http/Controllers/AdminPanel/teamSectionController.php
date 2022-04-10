@@ -96,7 +96,18 @@ class TeamSectionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $team = Team::find($id);
+        if ($team) {
+            return response()->json([
+                'status' => 200,
+                'team' => $team
+            ]);
+        }else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'team not found'
+            ]);
+        }
     }
 
     /**

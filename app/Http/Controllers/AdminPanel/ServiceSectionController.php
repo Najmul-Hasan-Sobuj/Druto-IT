@@ -5,6 +5,8 @@ namespace App\Http\Controllers\AdminPanel;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
 class ServiceSectionController extends Controller
@@ -113,67 +115,48 @@ class ServiceSectionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validation = Validator::make($request->all(), [
             'title'       => 'required',
             'description' => 'required',
         ]);
+        if ($validation->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validation->messages()
+            ]);
+        }else {
+                $service = Service::find($id);
+                if ($service) {
+                    $service->title = $request->title;
+                    $service->description = $request->description;
 
+                    if ($request->hasFile('image')) {
+                        
+                        $path = 'assets/images/service/' . $service->image;
+                        if (File::exists($path)) {
+                            File::delete($path);
+                        }
+                        $service_image  = $request->file('image');
+                        $extention      = $service_image->getClientOriginalName();
+                        $fileName       = time() . '.' .$extention;
+                        $service_image->move('assets/images/service/', $fileName);
+                        Image:: make($service_image)->resize(512, 512)->save($fileName);
+                        $service->image = $fileName;
+                    }
+                    $service->save();
 
-        $service = Service::find($id);
-        $service_image = $request->file('image');
-
-
-        if ($service == null){
-
-            if ($service_image){
-                $service = new Service();
-
-//                $service_image = $request->file('image');
-                $imageName = $service_image->getClientOriginalName();
-                $directory = 'assets/images/service/';
-                $imageUrl = $directory . $imageName;
-                Image::make($service_image)->resize(512, 512)->save($imageUrl);
-
-                $service->id          = $id;
-                $service->title       = $request->title;
-                $service->description = $request->description;
-                $service->image       = $imageUrl;
-                $service->save();
-            }else{
-                $service->id          = $id;
-                $service->title       = $request->title;
-                $service->description = $request->description;
-                $service->image       = $imageUrl;
-                $service->save();
-            }
-
-
-        }else{
-            if ($service_image){
-                unlink($service->image);
-//                $service_image = $request->file('image');
-                $imageName = date('mdYHis') . uniqid() . $service_image->getClientOriginalName();
-                $directory = 'assets/images/service/';
-                $imageUrl = $directory . $imageName;
-                Image::make($service_image)->resize(512, 512)->save($imageUrl);
-
-                $service->id          = $id;
-                $service->title       = $request->title;
-                $service->description = $request->description;
-                $service->image       = $imageUrl;
-                $service->save();
-
-            }else{
-                $service->id          = $id;
-                $service->title       = $request->title;
-                $service->description = $request->description;
-                $service->image       = $imageUrl;
-                $service->save();
-            }
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'data saved successfully'
+                    ]);
+                }else {
+                    return response()->json([
+                        'status' => 404,
+                        'message' => 'data saved successfully'
+                    ]);
+                }
+                
         }
-
-        return redirect()->route('service.index')->with('message','Service Updated Successfully');
-
     }
 
     /**
