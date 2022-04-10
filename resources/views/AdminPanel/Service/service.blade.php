@@ -145,7 +145,7 @@ Service
                             @csrf
                             <div class="form-row">
                                 <div class="col-12 mb-3">
-                                    <input id="id" type="text" class="form-control @error('id') is-invalid @enderror"
+                                    <input id="id" type="hidden" class="form-control @error('id') is-invalid @enderror"
                                         value="" name="id" placeholder="Enter id ">
                                 </div>
                                 @error('title')

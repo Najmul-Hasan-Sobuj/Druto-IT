@@ -117,8 +117,8 @@ class ServiceSectionController extends Controller
     public function update(Request $request, $id)
     {
         $validation = Validator::make($request->all(), [
-            // 'title'       => 'required',
-            // 'description' => 'required',
+            'title'       => 'required',
+            'description' => 'required',
         ]);
         if ($validation->fails()) {
 
