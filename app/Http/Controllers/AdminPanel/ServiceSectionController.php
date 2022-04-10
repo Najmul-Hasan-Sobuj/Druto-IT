@@ -6,6 +6,7 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 
@@ -116,18 +117,19 @@ class ServiceSectionController extends Controller
     public function update(Request $request, $id)
     {
         $validation = Validator::make($request->all(), [
-            'title'       => 'required',
-            'description' => 'required',
+            // 'title'       => 'required',
+            // 'description' => 'required',
         ]);
         if ($validation->fails()) {
+
             return response()->json([
-                'status' => 400,
+                'status' => 500,
                 'errors' => $validation->messages()
             ]);
         }else {
                 $service = Service::find($id);
                 if ($service) {
-                    $service->title = $request->title;
+                    $service->title       = $request->title;
                     $service->description = $request->description;
 
                     if ($request->hasFile('image')) {
@@ -151,7 +153,7 @@ class ServiceSectionController extends Controller
                 }else {
                     return response()->json([
                         'status' => 404,
-                        'message' => 'data not saves'
+                        'message' => 'data not submit'
                     ]);
                 }
                 
